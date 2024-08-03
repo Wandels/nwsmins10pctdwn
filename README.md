@@ -1,19 +1,36 @@
-###### How I spent my Junior Fall Semester and Winter Break:  
-### Mean-Reversion/Trend-Following Strategy developed in Python with Databento, Polygon, and MongoDB 
-#### A big thank you to [Databento](https://databento.com/) for their data sponsorship which made this project possible. I cannot recommend their API enough.
-###### Please email andelman.w@wustl.edu with any questions, criticisms, or tips for improvement!
-___
-### Hypothesis:  
-*Stocks that experience significant and sudden drops are likely to continue their decline briefly before reverting to their mean value.*  
-In essence, the strategy involves analyzing the top 3000 US Equities by liquidity or market capitalization, identifying those that experienced the *fastest* 10% drop within a rolling 60-day window. For each qualifying stock, I calculate a weight based on the number of days elapsed since the fastest drop, using the arctan function to scale the weight between 0 and $\frac{\pi}{2}$. This scaling emphasizes more recent drops (momentum), allowing for a dynamic adjustment between short and long positions over time as signals age.  
+# Algorithmic Trading Strategy with Databento Price Data 
+Developed in Python with Databento, Polygon, and MongoDB.
 
-To ensure market neutrality and to create the initial short positions, I adjust these initial weights by subtracting their mean, effectively centering the distribution around zero. This adjustment serves two purposes:
-1. it ensures that for every short position, there's a corresponding long position to hedge it, and it also fine-tunes the strategy's responsiveness to recent vs. older price drops.
-2. Stocks with more recent drops (and thus weights less than the mean, closer to 0) become negative, representing larger short positions, while those representing older drops are kept long.
+### Acknowledgements
+A big thank you to [Databento](https://databento.com/) for their data sponsorship which made this project possible. I highly recommend their API.
 
-Finally, to comply with the CQA challenge guidelines, I cap the weights at 4.9% & normalize to ensure the portfolio's total weight sums to 1.  
-This step ensures the strategy remains practical and within risk management parameters.
-___
-### Conclusion
-If you are here for an edge in the market, I am sorry to disappoint. Over the short backtesting window I could afford, this strategy **did not show promising profitability**. There is either a flaw in my hypothesis, a mistake in my strategy logic code, or most likely, a mistake in my backtest. There were multiple points in the development process where I faced difficult decisions and was forced to make assumptions. I have come to learn that this is often what Algorithmic Development is. Not everything can be backtested and if you ever want your algorithm to see the light of day, it takes a leap of faith.
-Nonetheless, the educational experience I gained from this was priceless. 
+For any questions, criticisms, or tips for improvement, please email me at andelman.w@wustl.edu.
+
+---
+
+## Hypothesis
+**Stocks that experience significant and sudden drops are likely to continue their decline briefly before reverting to their mean value.**
+
+### Strategy Overview
+The strategy involves analyzing the top 3000 US Equities by liquidity or market capitalization, identifying those that experienced the fastest 10% drop within a rolling 60-day window. 
+
+#### Weight Calculation
+For each qualifying stock, a weight is calculated based on the number of days elapsed since the fastest drop, using the arctan function to scale the weight between 0 and $\frac{\pi}{2}$. This scaling emphasizes more recent drops (momentum), allowing for a dynamic adjustment between short and long positions over time as signals age.
+
+#### Market Neutrality
+To ensure market neutrality and create initial short positions:
+1. Initial weights are adjusted by subtracting their mean, centering the distribution around zero.
+2. Stocks with more recent drops (weights less than the mean) become negative, representing larger short positions, while those representing older drops are kept long.
+
+#### Risk Management
+Weights are capped at 4.9% and normalized to ensure the portfolio's total weight sums to 1, complying with the CQA challenge guidelines.
+
+---
+
+## Conclusion
+If you're looking for a market edge, I must disappoint. Over the short backtesting window, this strategy **did not show promising profitability**. The reasons could be:
+- A flaw in the hypothesis
+- A mistake in the strategy logic code
+- A mistake in the backtest
+
+Algorithmic development often involves difficult decisions and assumptions. Despite the lack of profitability, the educational experience gained was invaluable.
